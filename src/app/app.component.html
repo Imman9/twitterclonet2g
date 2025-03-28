@@ -1,0 +1,15 @@
+<div class="min-h-screen p-6 flex justify-center items-center flex-col">
+  <!-- Header Section -->
+  <div class="w-full flex justify-between items-center mb-6">
+    <!-- Title on the left -->
+    <h1 class="text-2xl font-extrabold text-blue-700">Twitter Clone</h1>
+
+    <!-- User Selection Dropdown on the left -->
+    <app-user-select (userSelected)="onUserSelected($event)"></app-user-select>
+  </div>
+
+  <!-- Post List -->
+  <div class="bg-gray-100 p-4 rounded-xl shadow-md w-full max-w-2xl">
+    <app-post-list [userId]="selectedUserId()"></app-post-list>
+  </div>
+</div>

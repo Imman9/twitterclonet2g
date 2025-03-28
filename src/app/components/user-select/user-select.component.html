@@ -1,0 +1,8 @@
+<select
+  class="p-3 border border-blue-300 rounded-lg w-full bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+  (change)="onUserChange($event)"
+>
+  <option *ngFor="let user of users()" [value]="user.id">
+    {{ user.username }}
+  </option>
+</select>
