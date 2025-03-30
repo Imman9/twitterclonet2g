@@ -1,0 +1,113 @@
+<div class="profile-container">
+  <!-- Cover Photo -->
+  <div class="cover-photo">
+    <img [src]="user()?.coverPhoto" alt="Cover photo" />
+  </div>
+
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="profile-picture">
+      <img [src]="user()?.profilePicture" alt="Profile picture" />
+    </div>
+  </div>
+
+  <!-- Profile Info -->
+  <div class="profile-info">
+    <h1 class="name">{{ user()?.name }}</h1>
+    <p class="handle">{{ user()?.username }}</p>
+    <p class="bio">{{ user()?.bio }}</p>
+    <div class="stats">
+      <span class="following">
+        <strong>{{ user()?.following }}</strong> Following
+      </span>
+      <span class="followers">
+        <strong>{{ user()?.followers }}</strong> Followers
+      </span>
+      <span class="tweets">
+        <strong>{{ user()?.tweets }}</strong> Tweets
+      </span>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="profile-nav">
+    <div class="nav-tabs">
+      <button
+        [class.active]="activeTab === 'tweets'"
+        (click)="setActiveTab('tweets')"
+      >
+        Tweets
+      </button>
+      <button
+        [class.active]="activeTab === 'replies'"
+        (click)="setActiveTab('replies')"
+      >
+        Replies
+      </button>
+    </div>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-area">
+    <!-- Tweets Tab -->
+    <div *ngIf="activeTab === 'tweets'" class="tweets-list">
+      <div *ngFor="let post of posts()" class="tweet-item">
+        <div class="tweet-content">
+          <h3 class="tweet-title">{{ post.title }}</h3>
+          <p class="tweet-body">{{ post.body }}</p>
+          <div class="tweet-meta">
+            <span class="tweet-date">{{
+              post.createdAt | date : "medium"
+            }}</span>
+            <div class="tweet-stats">
+              <span class="likes">❤️ {{ post.likes }}</span>
+              <span class="replies">💬 {{ post.replies }}</span>
+              <span class="retweets">🔄 {{ post.retweets }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- Replies to this tweet -->
+        <div class="tweet-replies" *ngIf="getPostReplies(post.id).length > 0">
+          <div *ngFor="let reply of getPostReplies(post.id)" class="reply-item">
+            <div class="reply-content">
+              <div class="reply-header">
+                <span class="reply-author">{{ reply.name }}</span>
+                <span class="reply-date">{{
+                  reply.createdAt | date : "medium"
+                }}</span>
+              </div>
+              <p class="reply-body">{{ reply.body }}</p>
+              <span class="reply-likes">❤️ {{ reply.likes }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Replies Tab -->
+    <div *ngIf="activeTab === 'replies'" class="replies-list">
+      <div *ngFor="let reply of replies()" class="reply-item">
+        <div class="reply-content">
+          <div class="reply-header">
+            <span class="reply-author">{{ reply.name }}</span>
+            <span class="reply-date">{{
+              reply.createdAt | date : "medium"
+            }}</span>
+          </div>
+          <p class="reply-body">{{ reply.body }}</p>
+          <span class="reply-likes">❤️ {{ reply.likes }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Media Tab -->
+    <div *ngIf="activeTab === 'media'" class="media-list">
+      <p>No media content available</p>
+    </div>
+
+    <!-- Likes Tab -->
+    <div *ngIf="activeTab === 'likes'" class="likes-list">
+      <p>No likes content available</p>
+    </div>
+  </div>
+</div>

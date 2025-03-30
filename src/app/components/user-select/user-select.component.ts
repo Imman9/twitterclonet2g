@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UserService, User } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-select',
@@ -16,16 +17,23 @@ import { CommonModule } from '@angular/common';
 })
 export class UserSelectComponent {
   @Output() userSelected = new EventEmitter<number>();
-  users = signal<{ id: number; username: string }[]>([]);
+  users = signal<User[]>([]);
+  isLoading = signal<boolean>(true);
 
-  constructor() {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((res) => res.json())
-      .then((data) => this.users.set(data));
+  constructor(private userService: UserService) {
+    // Update users when loading state changes
+    effect(() => {
+      if (!this.userService.getIsLoading()) {
+        this.users.set(this.userService.getUsers());
+        this.isLoading.set(false);
+      }
+    });
   }
 
   onUserChange(event: Event) {
     const target = event.target as HTMLSelectElement;
-    this.userSelected.emit(Number(target.value));
+    const userId = Number(target.value);
+    this.userService.selectUser(userId);
+    this.userSelected.emit(userId);
   }
 }
